@@ -33,3 +33,19 @@ def email(self):
 @email.setter
 def email(self, valor):
     try:
+        self._email = validar_email(valor)
+
+    except Exception as e:
+        raise ClienteError(f"Error en email:{e}") from e
+    
+
+#Metodo obligatorio heredado
+def mostrar_info(self):
+    return f"Cliente ID:{self._id}| Nombre: {self._nombre}| Email: {self._email}"
+
+
+#Metodo adicional útil
+def actualizar_email(self, nuevo_email):
+    self.email = nuevo_email
+    return "Email actualizado correctamente"
+
