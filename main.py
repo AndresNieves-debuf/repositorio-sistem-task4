@@ -2,7 +2,7 @@ from models.cliente import Cliente
 
 
 try:
-    c = Cliente(1, "Juan123", "correo_mal")
+    c = Cliente(1, "Juan", "Juancorre@gmail.com")
 except Exception as e:
     print(e)
 
