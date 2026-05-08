@@ -224,7 +224,7 @@ def ejecutar_pruebas():
     try:
 
         reserva2 = Reserva(
-            cliente,
+            cliente1,
             servicio3,
             -5
         )
