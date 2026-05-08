@@ -1,3 +1,4 @@
+from models import cliente
 from models.cliente import Cliente
 from models.servicio_especificos import (
    ReservaSala,
@@ -13,6 +14,14 @@ def ejecutar_pruebas():
     
     registrar_log("---INICIO DEL SISTEMA DE RESERVAS---")
 
+    # =========================================
+    # LISTAS INTERNAS DEL SISTEMA
+    # =========================================
+   
+    clientes = []
+    servicios = []
+    reservas = []
+
     #-------------------------
     # Operación 1:
     # Cliente valido
@@ -21,10 +30,12 @@ def ejecutar_pruebas():
     try:
         
         cliente1 = Cliente(
-            1,
-            "Juan Perez",
-            "juan@email.com"
-        )
+    1,
+    "Juan Perez",
+    "juan@email.com"
+)
+
+        clientes.append(cliente1)
 
         print(cliente1.mostrar_info())
 
@@ -66,6 +77,8 @@ def ejecutar_pruebas():
             100
         )
 
+        servicios.append(servicio1)
+
         print(servicio1.descripcion())
 
     except Exception as e:
@@ -104,6 +117,8 @@ def ejecutar_pruebas():
             servicio1,
             3
         )
+
+        reservas.append(reserva1)
 
         print(
             reserva1.mostrar_reserva()
@@ -168,28 +183,38 @@ def ejecutar_pruebas():
     # =====================================================
 
     try:
-
+        
         servicio3 = Asesoria(
-            "Consultoría",
+            "Consultoria",
             200
-        )
+            )
+        
+        servicios.append(servicio3)
 
         print(
             servicio3.descripcion()
-        )
-
-        print(
-            servicio3.calcular_costo(
-                2,
-                impuesto=0.19,
-                descuento=0.10
             )
-        )
+        
+        costo = servicio3.calcular_costo(
+            2,
+            impuesto=0.19,
+            descuento=0.1
+            )
 
     except Exception as e:
 
         print(e)
         registrar_log(f"Error operación 9: {e}")
+
+    else:
+
+        print(
+            f"Costo calculado correctamente: ${costo}"
+            )
+
+        registrar_log(
+            "Operación 9 ejecutada exitosamente"
+            )
 
     # =====================================================
     # OPERACIÓN 10
@@ -199,7 +224,7 @@ def ejecutar_pruebas():
     try:
 
         reserva2 = Reserva(
-            cliente1,
+            cliente,
             servicio3,
             -5
         )

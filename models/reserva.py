@@ -91,9 +91,9 @@ class Reserva:
         try:
 
             if self.duracion <= 0:
-                raise ReservaError(
-                    "La duración de la reserva debe ser mayor a cero"
-                )
+              raise ReservaError(
+        "La duración debe ser mayor a cero"
+    )
 
             costo = self.servicio.calcular_costo(self.duracion)
 
