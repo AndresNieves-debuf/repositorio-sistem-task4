@@ -1,252 +1,142 @@
-from models import cliente
 from models.cliente import Cliente
 from models.servicio_especificos import (
-   ReservaSala,
+    ReservaSala,
     AlquilerEquipo,
-     Asesoria
- )
-
+    Asesoria
+)
 from models.reserva import Reserva
-
 from utils.logger import registrar_log
 
 def ejecutar_pruebas():
-    
-    registrar_log("---INICIO DEL SISTEMA DE RESERVAS---")
+    registrar_log("--- INICIO DEL SISTEMA DE RESERVAS ---")
+    print("Iniciando simulación de 10 operaciones...\n")
 
     # =========================================
-    # LISTAS INTERNAS DEL SISTEMA
+    # 1. LISTAS INTERNAS (CONTENEDORES)
     # =========================================
-   
-    clientes = []
-    servicios = []
-    reservas = []
+    lista_clientes = []
+    lista_servicios = []
+    lista_reservas = []
 
-    #-------------------------
-    # Operación 1:
-    # Cliente valido
-    #-------------------------
-
-    try:
-        
-        cliente1 = Cliente(
-    1,
-    "Juan Perez",
-    "juan@email.com"
-)
-
-        clientes.append(cliente1)
-
-        print(cliente1.mostrar_info())
-
-    except Exception as e:
-        
-        print(e)
-        registrar_log(f"Error operación 1: {e}")
-      
-      
     # =====================================================
-    # OPERACIÓN 2
-    # Cliente inválido
+    # OPERACIÓN 1: Registro de Clientes Válidos (Bucle)
     # =====================================================
+    datos_clientes = [
+        (1, "Juan Perez", "juan@email.com"),
+        (2, "Maria Lopez", "maria@email.com")
+    ]
 
+    for datos in datos_clientes:
+        try:
+            nuevo_cliente = Cliente(datos[0], datos[1], datos[2])
+            lista_clientes.append(nuevo_cliente) # CORREGIDO: Se agrega a la lista
+            print(f"Operación 1: {nuevo_cliente.mostrar_info()}")
+        except Exception as e:
+            registrar_log(f"Error registrando cliente: {e}")
+
+    # =====================================================
+    # OPERACIÓN 2: Cliente Inválido (Nombre con números)
+    # =====================================================
     try:
-
-        cliente2 = Cliente(
-            2,
-            "Pedro123",
-            "correo_mal"
-        )
-
-        print(cliente2.mostrar_info())
-
+        cliente_error = Cliente(3, "Carlos123", "carlos@email.com")
+        lista_clientes.append(cliente_error)
     except Exception as e:
-
-        print(e)
+        print(f"Operación 2 (Esperada): {e}")
         registrar_log(f"Error operación 2: {e}")
 
     # =====================================================
-    # OPERACIÓN 3
-    # Servicio válido
+    # OPERACIÓN 3: Servicio de Sala Válido
     # =====================================================
-
     try:
-
-        servicio1 = ReservaSala(
-            "Sala VIP",
-            100
-        )
-
-        servicios.append(servicio1)
-
-        print(servicio1.descripcion())
-
+        sala_vip = ReservaSala("Sala VIP", 150.0)
+        lista_servicios.append(sala_vip) # CORREGIDO
+        print(f"Operación 3: {sala_vip.descripcion()}")
     except Exception as e:
-
-        print(e)
         registrar_log(f"Error operación 3: {e}")
 
     # =====================================================
-    # OPERACIÓN 4
-    # Servicio inválido
+    # OPERACIÓN 4: Servicio Inválido (Nombre vacío)
     # =====================================================
-
     try:
-
-        servicio2 = AlquilerEquipo(
-            "",
-            -50
-        )
-
-        print(servicio2.descripcion())
-
+        servicio_nulo = ReservaSala("", 100)
     except Exception as e:
-
-        print(e)
+        print(f"Operación 4 (Esperada): {e}")
         registrar_log(f"Error operación 4: {e}")
 
     # =====================================================
-    # OPERACIÓN 5
-    # Reserva válida
+    # OPERACIÓN 5: Reserva Válida (Juan Perez reserva Sala VIP)
     # =====================================================
-
     try:
-
-        reserva1 = Reserva(
-            cliente1,
-            servicio1,
-            3
-        )
-
-        reservas.append(reserva1)
-
-        print(
-            reserva1.mostrar_reserva()
-        )
-
+        if lista_clientes and lista_servicios:
+            reserva1 = Reserva(lista_clientes[0], lista_servicios[0], 3)
+            lista_reservas.append(reserva1) # CORREGIDO
+            print(f"Operación 5: Reserva creada para {lista_clientes[0].nombre}")
     except Exception as e:
-
-        print(e)
         registrar_log(f"Error operación 5: {e}")
 
     # =====================================================
-    # OPERACIÓN 6
-    # Confirmar reserva
+    # OPERACIÓN 6: Procesar Reserva (Cálculo con Polimorfismo)
     # =====================================================
-
     try:
-
-        print(
-            reserva1.confirmar_reserva()
-        )
-
+        if lista_reservas:
+            resultado = lista_reservas[0].procesar_reserva()
+            print(f"Operación 6: {resultado}")
     except Exception as e:
-
-        print(e)
         registrar_log(f"Error operación 6: {e}")
 
     # =====================================================
-    # OPERACIÓN 7
-    # Cancelar reserva
+    # OPERACIÓN 7: Alquiler de Equipo Válido
     # =====================================================
-
     try:
-
-        print(
-            reserva1.cancelar_reserva()
-        )
-
+        laptop = AlquilerEquipo("Laptop Gamer", 50.0)
+        lista_servicios.append(laptop)
+        print(f"Operación 7: {laptop.descripcion()}")
     except Exception as e:
-
-        print(e)
         registrar_log(f"Error operación 7: {e}")
 
     # =====================================================
-    # OPERACIÓN 8
-    # Procesar reserva cancelada
+    # OPERACIÓN 8: Reserva de Equipo con Impuesto/Descuento
     # =====================================================
-
     try:
-
-        print(
-            reserva1.procesar_reserva()
+        costo_equipo = laptop.calcular_costo(
+            dias=2,
+            impuesto=0.15,
+            descuento=0.05
         )
-
     except Exception as e:
-
-        print(e)
         registrar_log(f"Error operación 8: {e}")
-
-    # =====================================================
-    # OPERACIÓN 9
-    # Asesoría válida
-    # =====================================================
-
-    try:
-        
-        servicio3 = Asesoria(
-            "Consultoria",
-            200
-            )
-        
-        servicios.append(servicio3)
-
-        print(
-            servicio3.descripcion()
-            )
-        
-        costo = servicio3.calcular_costo(
-            2,
-            impuesto=0.19,
-            descuento=0.1
-            )
-
-    except Exception as e:
-
-        print(e)
-        registrar_log(f"Error operación 9: {e}")
-
     else:
-
         print(
-            f"Costo calculado correctamente: ${costo}"
-            )
+            f"Operación 8 exitosa: ${costo_equipo}"
+        )
 
         registrar_log(
-            "Operación 9 ejecutada exitosamente"
-            )
+        "Operación 8 ejecutada correctamente"
+    )
 
     # =====================================================
-    # OPERACIÓN 10
-    # Reserva inválida
+    # OPERACIÓN 9: Asesoría Válida
     # =====================================================
-
     try:
-
-        reserva2 = Reserva(
-            cliente1,
-            servicio3,
-            -5
-        )
-
-        print(
-            reserva2.mostrar_reserva()
-        )
-
+        asesoria_legal = Asesoria("Consultoría TI", 200.0)
+        lista_servicios.append(asesoria_legal)
+        print(f"Operación 9: {asesoria_legal.descripcion()}")
     except Exception as e:
+        registrar_log(f"Error operación 9: {e}")
 
-        print(e)
+    # =====================================================
+    # OPERACIÓN 10: Reserva Inválida (Duración negativa)
+    # =====================================================
+    try:
+        reserva_fallida = Reserva(lista_clientes[0], lista_servicios[-1], -10)
+    except Exception as e:
+        print(f"Operación 10 (Esperada): {e}")
         registrar_log(f"Error operación 10: {e}")
 
-    registrar_log("===== FIN DEL SISTEMA =====")
-
-
-# =========================================================
-# EJECUCIÓN PRINCIPAL
-# =========================================================
+    print("\n--- Simulación finalizada. Revisa data/logs.txt para más detalles. ---")
+    registrar_log("--- FIN DEL SISTEMA ---")
 
 if __name__ == "__main__":
-
     ejecutar_pruebas()
 
  
